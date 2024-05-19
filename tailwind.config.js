@@ -6,10 +6,25 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "light-theme": "url('./public/img34.jpg')",
+        "dark-theme": "url('./public/img21.jpg')",
+      },
+      backdropBlur: {
+        xs: "2px",
+        sm: "4px",
+        md: "8px",
+        lg: "16px",
+        xl: "24px",
+      },
+      backgroundAttachment: {
+        fixed: "fixed",
+      },
+    },
   },
   darkMode: "class",
   plugins: [
@@ -76,4 +91,4 @@ export default {
       },
     }),
   ],
-}
+};
