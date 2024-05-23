@@ -8,17 +8,19 @@ import {
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToggleButton } from "./toggleButton/toggleButton";
-import { ArrowRightOutlined } from "@ant-design/icons";
 import PropTypes from "prop-types";
 import FetchComponent from "./cardsPage";
 import useImage from "./useImage";
 
 export default function Loading({ isDarkMode }) {
   const [selectedCard, setSelectedCard] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    const storedIsSidebarOpen = localStorage.getItem("isSidebarOpen");
+    return storedIsSidebarOpen ? JSON.parse(storedIsSidebarOpen) : true; // 默认打开
+  });
   //const [isLoaded, setLoaded] = useState(false);
 
-  const items = [1, 2, 3, 4, 5];
+  const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -51,7 +53,7 @@ export default function Loading({ isDarkMode }) {
   return (
     <>
       <AnimatePresence>
-        {isSidebarOpen && (
+        {(isSidebarOpen || selectedCard == null) && (
           <motion.div
             layout
             initial={{ width: "100%" }}
@@ -101,34 +103,23 @@ export default function Loading({ isDarkMode }) {
             layout
             key="selected"
             initial={{ width: 0, opacity: 0 }}
-            animate={{ width: "75%", height: `calc(100vh - 88px)`, opacity: 1 }}
+            animate={{
+              width: `${isSidebarOpen ? "75%" : "100%"}`,
+              height: `calc(100vh - 88px)`,
+              opacity: 1,
+            }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="flex justify-center"
           >
             <Card className="w-full h-full m-3 relative" radius="lg">
               <CardHeader className="absolute z-40">
-                <div className="absolute inset-0 flex justify-between  bg-transparent">
-                  <ToggleButton
-                    setIsOpen={setIsSidebarOpen}
-                    isOpen={isSidebarOpen}
-                    isDarkMode={isDarkMode}
-                  />
-                  <Button
-                    onClick={() => {
-                      setSelectedCard(null);
-                      setIsSidebarOpen(true);
-                    }}
-                    radius="full"
-                    className={`${
-                      isDarkMode
-                        ? "bg-gradient-to-tr from-pink-500 to-blue-500"
-                        : "bg-gradient-to-tr from-yellow-500 to-pink-500"
-                    } m-4 text-white shadow-lg`}
-                  >
-                    <ArrowRightOutlined />
-                  </Button>
-                </div>
+                <ToggleButton
+                  setIsOpen={setIsSidebarOpen}
+                  isOpen={isSidebarOpen}
+                  isDarkMode={isDarkMode}
+                  setSelectedCard={setSelectedCard}
+                />
               </CardHeader>
               {imageUrl && (
                 <img
