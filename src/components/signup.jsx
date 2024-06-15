@@ -7,16 +7,19 @@ import {
   Input,
   Checkbox,
   Button,
-  Link,
 } from "@nextui-org/react";
 import { MailOutlined } from "@ant-design/icons";
 import { LockOutlined } from "@ant-design/icons";
+import { message } from "antd";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [isSuperuser, setIsSuperuser] = useState(false);
+const info = () => {
+  message.info("sign up successfully!");
+};
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       console.error("密码和确认密码不匹配");
@@ -26,7 +29,9 @@ const Register = () => {
     const registerData = {
       username: username,
       password: password,
+      superuser: isSuperuser,
     };
+    console.log("registerData:", registerData);
 
     try {
       const response = await fetch("你的注册API地址", {
@@ -34,6 +39,7 @@ const Register = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(registerData),
       });
 
@@ -64,7 +70,7 @@ const Register = () => {
             </div>
             <div className="w-full lg:w-3/5">
               <ModalHeader className="flex flex-col gap-1">
-              <div style={{height:"32px"}}></div>
+                <div style={{ height: "32px" }}></div>
                 Register
               </ModalHeader>
               <ModalBody>
@@ -110,12 +116,25 @@ const Register = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   onClear={() => setPassword("")}
                 />
+                <Checkbox
+                  isSelected={isSuperuser}
+                  onValueChange={(value) => setIsSuperuser(value)}
+                  classNames={{label: "text-small",}}
+                >
+                  Is Superuser?
+                </Checkbox>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={handleRegister}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    handleRegister();
+                    onClose();
+                  }}
+                >
                   Register
                 </Button>
               </ModalFooter>

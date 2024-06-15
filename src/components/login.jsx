@@ -11,8 +11,10 @@ import {
 } from "@nextui-org/react";
 import { MailOutlined } from "@ant-design/icons";
 import { LockOutlined } from "@ant-design/icons";
+import { message } from "antd";
+import PropTypes from "prop-types";
 
-function Login() {
+const Login = ({ setLoged }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,13 +23,14 @@ function Login() {
       username: username,
       password: password,
     };
-
+    console.log("loginData:", loginData);
     try {
-      const response = await fetch("你的登录API地址", {
+      const response = await fetch("http://127.0.0.1:34255/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include", // 设置 credentials 为 'include' 来包含跨域请求中的 cookie
         body: JSON.stringify(loginData),
       });
 
@@ -40,6 +43,9 @@ function Login() {
     } catch (error) {
       console.error("请求失败:", error);
     }
+  };
+  const info = () => {
+    message.info("sign in successfully!");
   };
   return (
     <ModalContent>
@@ -57,7 +63,7 @@ function Login() {
             </div>
             <div className="w-full lg:w-3/5">
               <ModalHeader className="flex flex-col gap-1">
-                <div style={{height:"64px"}}></div>
+                <div style={{ height: "64px" }}></div>
                 Log in
               </ModalHeader>
               <ModalBody>
@@ -89,24 +95,18 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   onClear={() => setPassword("")}
                 />
-                <div className="flex py-2 px-1 justify-between">
-                  <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link>
-                </div>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="flat" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={handleLogin}>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    handleLogin();
+                    onClose();
+                  }}
+                >
                   Sign in
                 </Button>
               </ModalFooter>
@@ -117,5 +117,9 @@ function Login() {
     </ModalContent>
   );
 }
+
+Login.propTypes = {
+  setLoged: PropTypes.func,
+};
 
 export default Login;
