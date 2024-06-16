@@ -17,12 +17,13 @@ const Register = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSuperuser, setIsSuperuser] = useState(false);
-const info = () => {
-  message.info("sign up successfully!");
-};
+  const info = () => {
+    message.info("sign up successfully!");
+  };
   const handleRegister = async () => {
     if (password !== confirmPassword) {
       console.error("密码和确认密码不匹配");
+      message.error("密码和确认密码不匹配");
       return;
     }
 
@@ -34,7 +35,7 @@ const info = () => {
     console.log("registerData:", registerData);
 
     try {
-      const response = await fetch("你的注册API地址", {
+      const response = await fetch("/proxy/api/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,12 +43,21 @@ const info = () => {
         credentials: "include",
         body: JSON.stringify(registerData),
       });
-
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-        console.log("注册成功:", data);
+        if (data.status === "Ok") {
+          console.info("Registration success:", data.message);
+          message.info(data.message);
+        } else {
+          console.error("Registration failed:", data.message);
+          message.error(data.message);
+        }
       } else {
-        console.error("注册失败:", response.statusText);
+        console.error(
+          "ERROR: Registration failed with status",
+          response.status
+        );
+        message.error("Registration failed.");
       }
     } catch (error) {
       console.error("请求失败:", error);
@@ -119,7 +129,7 @@ const info = () => {
                 <Checkbox
                   isSelected={isSuperuser}
                   onValueChange={(value) => setIsSuperuser(value)}
-                  classNames={{label: "text-small",}}
+                  classNames={{ label: "text-small" }}
                 >
                   Is Superuser?
                 </Checkbox>

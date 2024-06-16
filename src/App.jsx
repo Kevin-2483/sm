@@ -13,16 +13,17 @@ import {
   TagsOutlined,
 } from "@ant-design/icons";
 import { Input, Skeleton, Button } from "@nextui-org/react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Tooltip,
-} from "@nextui-org/react";
+// import {
+//   Table,
+//   TableHeader,
+//   TableColumn,
+//   TableBody,
+//   TableRow,
+//   TableCell,
+//   Tooltip,
+// } from "@nextui-org/react";
 import { message } from "antd";
+import Warehouse from "./components/warehouse";
 export default function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const dark = localStorage.getItem("dark");
@@ -58,9 +59,7 @@ export default function App() {
           currentLanguage={currentLanguage}
           setCurrentLanguage={setCurrentLanguage}
         />
-        <div className="flex justify-center min-h-screen  backdrop-blur-[100px]">
-         
-        </div>
+        <div className="flex justify-center min-h-screen  backdrop-blur-[100px]"></div>
 
         <motion.button
           initial={{ height: 50, width: 50, x: 0 }}
@@ -71,7 +70,9 @@ export default function App() {
           } text-foreground shadow-lg rounded-full fixed bottom-8 right-8 flex items-center z-40`}
           onMouseEnter={() => setIsRightHovered(true)}
           onMouseLeave={() => setIsRightHovered(false)}
-          // onClick={handleCartButtonClick}
+          onClick={() => {
+            setOpen(true);
+          }}
         >
           {open == false ? (
             <>
@@ -123,7 +124,7 @@ export default function App() {
                   transition={{ duration: 1 }}
                   className="ml-4"
                 >
-                  {isCart == false ? "添加购物车" : "关闭购物车"}
+                  {/* {isCart == false ? "添加购物车" : "关闭购物车"} */}
                 </motion.div>
               )}
             </>
@@ -135,7 +136,7 @@ export default function App() {
           transition={{ duration: 0.3 }}
           className={`${
             isDarkMode ? "bg-black bg-opacity-80" : "bg-white bg-opacity-80"
-          } text-foreground shadow-lg rounded-full fixed bottom-8 left-8 flex items-center z-40`}
+          } text-foreground shadow-lg rounded-full fixed bottom-24 right-8 flex items-center z-40`}
           onMouseEnter={() => setIsLeftHovered(true)}
           onMouseLeave={() => setIsLeftHovered(false)}
         >
@@ -146,7 +147,7 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 className="flex items-center justify-center"
-                style={{ position: "absolute", left: "10px" }}
+                style={{ position: "absolute", right: "10px" }}
               >
                 <TagsOutlined
                   style={{
@@ -161,7 +162,7 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1 }}
                   className="ml-4"
-                  style={{ position: "absolute", right: "10px" }}
+                  style={{ position: "absolute", left: "10px" }}
                 >
                   立即结算
                 </motion.div>
@@ -174,7 +175,7 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
                 className="flex items-center justify-center"
-                style={{ position: "absolute", left: "10px" }}
+                style={{ position: "absolute", right: "10px" }}
               >
                 <TagFilled
                   style={{
@@ -189,9 +190,9 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   transition={{ duration: 1 }}
                   className="ml-4"
-                  style={{ position: "absolute", right: "10px" }}
+                  style={{ position: "absolute", left: "10px" }}
                 >
-                  {isCart == false ? "立即购买" : "立即结算"}
+                  {/* {isCart == false ? "立即购买" : "立即结算"} */}
                 </motion.div>
               )}
             </>
@@ -219,7 +220,9 @@ export default function App() {
                   X
                 </Button>
               </div>
-              
+              <div className="h-[500px] w-full">
+                <Warehouse />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

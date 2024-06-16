@@ -25,7 +25,7 @@ const Login = ({ setLoged }) => {
     };
     console.log("loginData:", loginData);
     try {
-      const response = await fetch("http://127.0.0.1:34255/api/login", {
+      const response = await fetch("/proxy/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,11 +34,21 @@ const Login = ({ setLoged }) => {
         body: JSON.stringify(loginData),
       });
 
+      const data = await response.json();
       if (response.ok) {
-        const data = await response.json();
-        console.log("登录成功:", data);
+        if (data.status === "Ok") {
+          console.info("Login success:", data.message);
+          message.info("Login success");
+        } else {
+          console.error("Login failed:", data.message);
+          message.error("Login success");
+        }
       } else {
-        console.error("登录失败:", response.statusText);
+        console.error(
+          "ERROR: Registration failed with status",
+          response.status
+        );
+        message.error("Login failed.");
       }
     } catch (error) {
       console.error("请求失败:", error);
